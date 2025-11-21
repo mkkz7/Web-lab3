@@ -1,0 +1,43 @@
+.center-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* на всю высоту экрана */
+}
+
+.card-content {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.card-content:hover {
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+}
+
+.fio {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.clock {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.nav-button {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 25px;
+    color: green;
+}
+
+.nav-button:hover{
+    color: darkgreen;
+}

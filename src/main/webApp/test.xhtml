@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+</h:head>
+<h:body>
+    <h:outputText value="ControllerBean: #{controllerBean}" /><br/>
+    <h:outputText value="CoordinateBean: #{controllerBean.coordinate}" /><br/>
+    <h:inputText value="#{controllerBean.coordinate.x}" />
+</h:body>
+</html>

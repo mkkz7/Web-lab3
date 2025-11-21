@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta charset="UTF-8"/>
+    <h:title>Web Lab 3</h:title>
+    <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/styles/index.css"/>
+</h:head>
+<h:body>
+    <h:panelGroup layout="block" styleClass="center-block">
+        <h:panelGroup layout="block" styleClass="center-block-content">
+
+            <h:panelGroup layout="block" styleClass="fio">
+                Клименко Марк Анатольевич
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" styleClass="clock">
+                <h:outputText id="date" styleClass="date" value="" escape="false" />,
+                <h:outputText id="time" value="" escape="false" />
+            </h:panelGroup>
+
+            <script type="text/javascript">
+                // This JSF EL expression generates the correct, full ID string (e.g., "j_idt4:date")
+                const clientIdDate = '#{component.findComponent("date").clientId}';
+                const clientIdTime = '#{component.findComponent("time").clientId}';
+            </script>
+
+            <h:button value="Основная страница" outcome="goToMain" styleClass="nav-button"/>
+            <h:button value="Тестовая страница" outcome="goToTest" styleClass="nav-button"/>
+        </h:panelGroup>
+    </h:panelGroup>
+
+    <script type="module" src="#{request.contextPath}/resources/scripts/index.js"></script>
+
+</h:body>
+</html>
