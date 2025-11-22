@@ -13,6 +13,6 @@ import lombok.Setter;
 @ApplicationScoped
 public class CoordinateBean {
     private Double x = 0.0;
-    private Double y = 0.0;
+    private Double y = null;
     private Double r = 0.0;
 }
