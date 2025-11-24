@@ -1,4 +1,4 @@
-function getR(){
+window.getR = function (){
     const widget =  PF('spinnerR');
     if(!widget){
         console.warn("SpinnerR is not loaded");
@@ -9,6 +9,8 @@ function getR(){
 
 const canvas = document.getElementById('graphCanvas');
 const ctx = canvas.getContext("2d");
+const center = { x: canvas.width / 2, y: canvas.height / 2 };
+
 
 function getClickCoordinates(evt, R){
     const rect = canvas.getBoundingClientRect();
@@ -25,78 +27,86 @@ function getClickCoordinates(evt, R){
     return { xVal, yVal };
 }
 
-function drawGraph(R=1){
+window.drawGraph = function (R){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeStyle = "black";
     ctx.fillStyle = "black";
     ctx.font = "12px Arial";
     ctx.textBaseline = "middle";
+    const scale = 100 / R;
 
     ctx.beginPath();
-    ctx.moveTo(0, 150);
-    ctx.lineTo(300, 150);
-    ctx.moveTo(150, 0);
-    ctx.lineTo(150, 300);
+    ctx.moveTo(0, center.y);
+    ctx.lineTo(canvas.width, center.y);
+    ctx.moveTo(center.x, 0);
+    ctx.lineTo(center.x, canvas.height);
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(150, 0); ctx.lineTo(144, 15); ctx.lineTo(156, 15); ctx.closePath(); ctx.fill();
+    ctx.moveTo(center.x, 0); ctx.lineTo(center.x-6, 12); ctx.lineTo(center.x+6, 12); ctx.closePath(); ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(300, 150); ctx.lineTo(285, 156); ctx.lineTo(285, 144); ctx.closePath(); ctx.fill();
+    ctx.moveTo(canvas.width, center.y); ctx.lineTo(canvas.width-12, center.y-6); ctx.lineTo(canvas.width-12, center.y+6); ctx.closePath(); ctx.fill();
 
-    function tick(x1, y1, x2, y2) {
+
+    const ticks = [-R, -R/2, R/2, R];
+    ticks.forEach(t => {
+        // OX
         ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
+        ctx.moveTo(center.x + t*scale, center.y-5);
+        ctx.lineTo(center.x + t*scale, center.y+5);
         ctx.stroke();
-    }
+        ctx.fillText(t.toString(), center.x + t*scale - 10, center.y + 15);
 
-    // OX
-    tick(200, 145, 200, 155);
-    tick(250, 145, 250, 155);
-    tick(50, 145, 50, 155);
-    tick(100, 145, 100, 155);
+        // OY
+        ctx.beginPath();
+        ctx.moveTo(center.x-5, center.y - t*scale);
+        ctx.lineTo(center.x+5, center.y - t*scale);
+        ctx.stroke();
+        ctx.fillText(t.toString(), center.x + 10, center.y - t*scale);
 
-    // OY
-    tick(145, 100, 155, 100);
-    tick(145, 50, 155, 50);
-    tick(145, 200, 155, 200);
-    tick(145, 250, 155, 250);
 
-    const scale = 100 / R;
+    });
 
-    ctx.fillText("R/2", 150 + scale * R / 2 - 10, 140);
-    ctx.fillText("R", 150 + scale * R - 5, 140);
-    ctx.fillText("-R/2", 150 - scale * R / 2 - 15, 140);
-    ctx.fillText("-R", 150 - scale * R - 10, 140);
+    // function tick(x1, y1, x2, y2) {
+    //     ctx.beginPath();
+    //     ctx.moveTo(x1, y1);
+    //     ctx.lineTo(x2, y2);
+    //     ctx.stroke();
+    // }
+    //
+    // // OX
+    // tick(200, 145, 200, 155);
+    // tick(250, 145, 250, 155);
+    // tick(50, 145, 50, 155);
+    // tick(100, 145, 100, 155);
+    //
+    // // OY
+    // tick(145, 100, 155, 100);
+    // tick(145, 50, 155, 50);
+    // tick(145, 200, 155, 200);
+    // tick(145, 250, 155, 250);
 
-    ctx.fillText("R/2", 160, 150 - scale * R / 2);
-    ctx.fillText("R", 160, 150 - scale * R);
-    ctx.fillText("-R/2", 160, 150 + scale * R / 2);
-    ctx.fillText("-R", 160, 150 + scale * R);
 
-    ctx.fillText("X", 285, 140);
-    ctx.fillText("Y", 160, 15);
+    ctx.fillText("X", canvas.width - 15, center.y + 15);
+    ctx.fillText("Y", center.x + 10, 15);
 
     ctx.fillStyle = "rgba(60, 180, 100, 0.3)";
 
-    //rectangle
-    ctx.fillRect(50, 50, 100, 100);
+    // rectangle (II четверть)
+    ctx.fillRect(center.x - R*scale, center.y - R*scale, R*scale, R*scale);
 
-    //triangle
+    // triangle (III четверть)
     ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.lineTo(150, 150 + 50);
-    ctx.lineTo(50, 150);
-
+    ctx.moveTo(center.x, center.y);
+    ctx.lineTo(center.x - R*scale, center.y);
+    ctx.lineTo(center.x, center.y + R*scale/2);
     ctx.closePath();
     ctx.fill();
 
-
-    //sector
+    // sector (I четверть)
     ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.arc(150, 150, 50, Math.PI * 1.5, Math.PI * 2, false);
+    ctx.moveTo(center.x, center.y);
+    ctx.arc(center.x, center.y, R*scale/2, Math.PI * 1.5, 0, false);
     ctx.closePath();
     ctx.fill();
 }
@@ -136,7 +146,7 @@ window.drawPoints = function (){
         const cells = rows[i].getElementsByTagName('td');
         const x = parseFloat(cells[0].innerText);
         const y = parseFloat(cells[1].innerText);
-        const r = parseFloat(cells[2].innerText)
+        const r = getR();
         const hit = cells[3].innerText === 'hit';
         scale = 100/r;
 
@@ -147,7 +157,13 @@ window.drawPoints = function (){
     }
 }
 
+window.afterUpdate = function () {
+    drawGraph(getR());
+    drawPoints();
+};
+
 document.addEventListener('DOMContentLoaded', () =>{
-    drawGraph();
+    drawGraph(1);
     drawPoints();
 });
+

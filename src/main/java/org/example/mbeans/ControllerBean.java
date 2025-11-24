@@ -22,10 +22,22 @@ public class ControllerBean {
 
     @Inject
     private CoordinateBean coordinate;
-
     private List<Results> resultsList = new ArrayList<>();
+    AreaCheckBean checkBean = new AreaCheckBean();
 
     public ControllerBean() {}
+
+    public void onRadiusChange(){
+        try{
+            List<Results> oldResults = new ArrayList<>(resultsList);
+            resultsList.clear();
+            oldResults.forEach(results -> {
+                submitPoint(results.getX(), results.getY(), results.getR());
+            });
+        }catch(NullPointerException e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void submitFromForm(){
         try{
@@ -66,7 +78,6 @@ public class ControllerBean {
         System.out.println(y);
         System.out.println(r);
 
-        AreaCheckBean checkBean = new AreaCheckBean();
         Results results = checkBean.createResponse(x, y, r, startTime);
         resultsList.add(results);
     }
