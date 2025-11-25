@@ -4,5 +4,3 @@ document.addEventListener("DOMContentLoaded", ()=>{
    updateClock();
    setInterval(updateClock, 6000);
 });
-
-

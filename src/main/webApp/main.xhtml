@@ -23,7 +23,7 @@
             </fieldset>
             <fieldset>
                 <legend>Select Y:</legend>
-                <p:inputText value="#{controllerBean.coordinate.y}" placeholder="От -3 до 3" pt:data-id="y-input"/>
+                <p:inputText value="#{coordinateBean.y}" placeholder="От -3 до 3" pt:data-id="y-input"/>
             </fieldset>
             <fieldset>
                 <legend>Select R:</legend>
@@ -93,7 +93,6 @@
     <h:button value="Стартовая страница" outcome="goToIndex" styleClass="nav-button"/>
 </h:panelGroup>
 
-<!--    <script type="module" src="#{request.contextPath}/resources/scripts/main.js"></script>-->
     <h:outputScript library="scripts" name="main.js" target="body" />
 
 </h:body>

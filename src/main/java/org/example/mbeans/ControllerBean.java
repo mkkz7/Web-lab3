@@ -32,7 +32,7 @@ public class ControllerBean {
             List<Results> oldResults = new ArrayList<>(resultsList);
             resultsList.clear();
             oldResults.forEach(results -> {
-                submitPoint(results.getX(), results.getY(), results.getR());
+                submitPoint(results.getX(), results.getY(), coordinate.getR());
             });
         }catch(NullPointerException e){
             System.out.println(e.getMessage());

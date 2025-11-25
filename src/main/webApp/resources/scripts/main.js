@@ -11,7 +11,6 @@ const canvas = document.getElementById('graphCanvas');
 const ctx = canvas.getContext("2d");
 const center = { x: canvas.width / 2, y: canvas.height / 2 };
 
-
 function getClickCoordinates(evt, R){
     const rect = canvas.getBoundingClientRect();
     const x = evt.clientX - rect.left;
@@ -63,28 +62,7 @@ window.drawGraph = function (R){
         ctx.lineTo(center.x+5, center.y - t*scale);
         ctx.stroke();
         ctx.fillText(t.toString(), center.x + 10, center.y - t*scale);
-
-
     });
-
-    // function tick(x1, y1, x2, y2) {
-    //     ctx.beginPath();
-    //     ctx.moveTo(x1, y1);
-    //     ctx.lineTo(x2, y2);
-    //     ctx.stroke();
-    // }
-    //
-    // // OX
-    // tick(200, 145, 200, 155);
-    // tick(250, 145, 250, 155);
-    // tick(50, 145, 50, 155);
-    // tick(100, 145, 100, 155);
-    //
-    // // OY
-    // tick(145, 100, 155, 100);
-    // tick(145, 50, 155, 50);
-    // tick(145, 200, 155, 200);
-    // tick(145, 250, 155, 250);
 
 
     ctx.fillText("X", canvas.width - 15, center.y + 15);
@@ -148,6 +126,7 @@ window.drawPoints = function (){
         const y = parseFloat(cells[1].innerText);
         const r = getR();
         const hit = cells[3].innerText === 'hit';
+        console.warn(r);
         scale = 100/r;
 
         ctx.fillStyle = hit ? 'green' : 'red';
@@ -166,4 +145,3 @@ document.addEventListener('DOMContentLoaded', () =>{
     drawGraph(1);
     drawPoints();
 });
-
