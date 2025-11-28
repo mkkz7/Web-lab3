@@ -1,6 +1,7 @@
 package org.example.mbeans;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -9,42 +10,40 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.entities.CoordinateBean;
 import org.example.entities.Results;
-
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
 @Named("controllerBean")
-@ApplicationScoped
-public class ControllerBean {
+@SessionScoped
+public class ControllerBean implements Serializable {
 
     @Inject
     private CoordinateBean coordinate;
-    private List<Results> resultsList = new ArrayList<>();
-    AreaCheckBean checkBean = new AreaCheckBean();
+    @Inject
+    private ServiceBean serviceBean;
+    @Inject
+    private AreaCheckBean areaCheckBean;
+    private List<Results> resultsList;
+
+    @PostConstruct
+    public void init(){
+        resultsList = serviceBean.getAllResults();
+    }
 
     public ControllerBean() {}
 
     public void onRadiusChange(){
-        try{
-            List<Results> oldResults = new ArrayList<>(resultsList);
-            resultsList.clear();
-            oldResults.forEach(results -> {
-                submitPoint(results.getX(), results.getY(), coordinate.getR());
-            });
-        }catch(NullPointerException e){
-            System.out.println(e.getMessage());
-        }
+        resultsList = serviceBean.getAllResults().stream()
+                .map(r -> areaCheckBean.createResponse(r.getX(), r.getY(), r.getR()))
+                .collect(Collectors.toList());
     }
 
     public void submitFromForm(){
-        try{
-            submitPoint(coordinate.getX(), coordinate.getY(), coordinate.getR());
-        }catch(NullPointerException e){
-            System.out.println(e.getMessage());
-        }
+        submitPoint(coordinate.getX(), coordinate.getY(), coordinate.getR());
     }
 
     public void submitFromClick(){
@@ -52,15 +51,9 @@ public class ControllerBean {
                 .getExternalContext()
                 .getRequestParameterMap();
 
-        double x = 0, y = 0, r = 0;
-
-        try {
-            x = Double.parseDouble(params.get("clickX"));
-            y = Double.parseDouble(params.get("clickY"));
-            r = Double.parseDouble(params.get("clickR"));
-        }catch (NullPointerException e){
-            System.out.println(e.getMessage());
-        }
+        double x = Double.parseDouble(params.get("clickX"));
+        double y = Double.parseDouble(params.get("clickY"));
+        double r = Double.parseDouble(params.get("clickR"));
 
         submitPoint(x, y, r);
     }
@@ -72,13 +65,13 @@ public class ControllerBean {
             return;
         }
 
-        long startTime = System.nanoTime();
-
         System.out.println(x);
         System.out.println(y);
         System.out.println(r);
 
-        Results results = checkBean.createResponse(x, y, r, startTime);
-        resultsList.add(results);
+        Results result = areaCheckBean.createResponse(x, y, r);
+
+        resultsList.add(result);
+        serviceBean.addNewResult(result);
     }
 }

@@ -1,5 +1,10 @@
 package org.example.mbeans;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.entities.Results;
 import org.example.utils.AreaChecker;
 import org.example.utils.CheckerInterface;
@@ -7,20 +12,24 @@ import org.example.utils.CheckerInterface;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@ApplicationScoped
 public class AreaCheckBean {
     private final CheckerInterface areaChecker = new AreaChecker();
 
-    public Results createResponse(double x, double y, double r, long startTime){
-        boolean hit = areaChecker.calculate(x, y, r);
-        double executionTime = ((System.nanoTime() - startTime) / 1_000_000.0);
-        String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-        return new Results(x, y, r, hit, executionTime, currentTime);
+    public Results createResponse(double x, double y, double r){
+        boolean hit = check(x, y, r);
+        return Results.builder()
+                .id(0L)
+                .x(x)
+                .y(y)
+                .r(r)
+                .hit(hit).build();
     }
 
-
-
-    public boolean check(float x, float y, int r){
+    public boolean check(double x, double y, double r){
         return areaChecker.calculate(x, y, r);
     }
 }

@@ -78,19 +78,13 @@
                     <f:facet name="header">Result</f:facet>
                     #{res.hit ? 'hit' : 'no'}
                 </h:column>
-                <h:column>
-                    <f:facet name="header">Exec. Time</f:facet>
-                    #{res.execTime}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Time</f:facet>
-                    #{res.time}
-                </h:column>
             </h:dataTable>
         </h:form>
     </h:panelGroup>
 
     <h:button value="Стартовая страница" outcome="goToIndex" styleClass="nav-button"/>
+<!--сделаю в будущем-->
+    <h:button value="Очистить таблицу" onclick="" styleClass="nav-button"/>
 </h:panelGroup>
 
     <h:outputScript library="scripts" name="main.js" target="body" />

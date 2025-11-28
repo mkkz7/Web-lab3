@@ -1,28 +1,23 @@
 package org.example.entities;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Entity
+@Table(name="point_model")
+@Data
 @NoArgsConstructor
-@Named("resultsBean")
-@ApplicationScoped
+@AllArgsConstructor
+@Builder
 public class Results {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id = 0;
     private double x = 0.0;
     private double y = 0.0;
     private double r = 0.0;
     private boolean hit = false;
-    private double execTime = 0.0;
-    private String time = "";
-
-    public Results(double x, double y, double r, boolean hit, double execTime, String time) {
-        this.x = x;
-        this.y = y;
-        this.r = r;
-        this.hit = hit;
-        this.execTime = execTime;
-        this.time = time;
-    }
 }
